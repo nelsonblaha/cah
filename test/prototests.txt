@@ -1,0 +1,22 @@
+startpoint /games/create receives JSON containing game ID and users' info like:
+  {id:1,users:[{id:1},{id:2}]}
+
+As part of create callback, Game sends messages back intended for users containing direction URLs with tokens to access the game:
+  {user_id:1,message:"Join the Cards Against Humanity game going on at http://cah.herokuapp.com/games/12345"}
+
+Users visit the game show page via link, no login
+
+Scope properties:
+  newBlack: at start, all black cards
+  newWhite: at start, all white cards
+  hands: array containing an array for each player with player's id and cards
+  oldBlack: array containing an array for each player with player's id and black cards they've won
+  oldWhite: at start, all  
+  activeBlack: black card being played against
+  activeWhite: white cards being played against activeBlack
+  activePlayer: id of player choosing black card
+  (not global) myId: the id of the client
+
+Each client connecting to the game show page deals itself in, creating new arrays for itself in hands and oldBlack and issuing 7 cards to its hand from newWhite. 
+
+When activeWhite is equal to number of players minus one, the activePlayer is prompted with activeWhite and prompted to choose a winning white card. Cards are distributed accordingly by the activePlayer client, and activePlayer client changes activePlayer's value to the next player in the hands array.
